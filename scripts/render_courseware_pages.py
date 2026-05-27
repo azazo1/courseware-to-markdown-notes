@@ -9,6 +9,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 IMAGE_EXTENSIONS = {".png", ".jpg", ".jpeg", ".webp", ".bmp", ".tif", ".tiff"}
+OUTPUT_FORMAT = "webp"
+OUTPUT_QUALITY = 75
 
 
 def parse_args():
@@ -41,25 +43,35 @@ def numeric_suffix(path: Path):
 
 
 def render_pdf(input_path: Path, images_dir: Path, dpi: int):
+    temp_dir = images_dir / "_tmp_pdf"
+    temp_dir.mkdir(parents=True, exist_ok=True)
     cmd = [
         "pdftoppm",
         "-png",
         "-r",
         str(dpi),
         str(input_path),
-        str(images_dir / "page"),
+        str(temp_dir / "page"),
     ]
     subprocess.run(cmd, check=True)
 
-    rendered = sorted(images_dir.glob("page-*.png"), key=numeric_suffix)
+    rendered = sorted(temp_dir.glob("page-*.png"), key=numeric_suffix)
     if not rendered:
         fail("pdftoppm 没有生成任何页面图片")
 
     normalized = []
     for index, source in enumerate(rendered, start=1):
-        destination = images_dir / f"page-{index:04d}.png"
-        source.rename(destination)
+        destination = images_dir / f"page-{index:04d}.{OUTPUT_FORMAT}"
+        cmd = [
+            "magick",
+            str(source),
+            "-quality",
+            str(OUTPUT_QUALITY),
+            str(destination),
+        ]
+        subprocess.run(cmd, check=True)
         normalized.append(destination)
+    shutil.rmtree(temp_dir)
     return normalized
 
 
@@ -80,8 +92,15 @@ def collect_images(input_path: Path):
 def normalize_images(input_path: Path, images_dir: Path):
     normalized = []
     for index, source in enumerate(collect_images(input_path), start=1):
-        destination = images_dir / f"page-{index:04d}.png"
-        cmd = ["magick", str(source), "-auto-orient", str(destination)]
+        destination = images_dir / f"page-{index:04d}.{OUTPUT_FORMAT}"
+        cmd = [
+            "magick",
+            str(source),
+            "-auto-orient",
+            "-quality",
+            str(OUTPUT_QUALITY),
+            str(destination),
+        ]
         subprocess.run(cmd, check=True)
         normalized.append(destination)
     return normalized
@@ -130,7 +149,7 @@ def main():
         fail(f"输入路径不存在: {input_path}")
 
     source_type = detect_source_type(input_path)
-    required_binaries = ("pdftoppm",) if source_type == "pdf" else ("magick",)
+    required_binaries = ("pdftoppm", "magick") if source_type == "pdf" else ("magick",)
     for binary in required_binaries:
         if shutil.which(binary) is None:
             fail(f"PATH 中缺少必需工具: {binary}")
