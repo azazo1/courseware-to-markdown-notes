@@ -1,6 +1,6 @@
 ---
 name: courseware-to-markdown-notes
-description: 将课堂幻灯片, 培训课件, 导出的 PPT/PDF 讲义, 以及幻灯片图片集转换为完整且适合初学者阅读的 Markdown 笔记, 并忠实保留原始内容与结构. 当 Codex 需要逐页目视研读课件, 将所有有意义的内容整理成优雅的 Markdown, 而不是逐页摘要, 用 LaTeX 重写公式与符号, 将重要表格转换为 Markdown, 并避免依赖 OCR 或原始文本提取时使用.
+description: 将课堂幻灯片, 培训课件, 导出的 PPT/PDF 讲义, 以及幻灯片图片集转换为完整且适合初学者阅读的 Markdown 笔记, 忠实保留原始内容与结构, 并在需要时可拆分给多个 sub-agent 并行完成渲染, 逐页记录, 章节整合与复查. 当 Codex 需要逐页目视研读课件, 将所有有意义的内容整理成优雅的 Markdown, 而不是逐页摘要, 用 LaTeX 重写公式与符号, 将重要表格转换为 Markdown, 并避免依赖 OCR 或原始文本提取时使用.
 ---
 
 # 课件转 Markdown 笔记
