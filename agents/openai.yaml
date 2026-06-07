@@ -1,7 +1,7 @@
 interface:
   display_name: "课件笔记"
-  short_description: "将完整课件整理为 Markdown 笔记"
-  default_prompt: "使用 $courseware-to-markdown-notes 将这份课件转换为一份完整, 保留结构的 Markdown 笔记, 并用 LaTeX 表示公式."
+  short_description: "按约 10 页分块读图, 生成 Markdown 笔记"
+  default_prompt: "使用 $courseware-to-markdown-notes 将这份课件转换为一份完整, 保留结构的 Markdown 笔记. 默认先渲染为页面图片, 再按每批约 10 页委派给子 agent 逐块阅读, 主 agent 只做整合与终稿修订, 并用 LaTeX 表示公式."
 
 policy:
   allow_implicit_invocation: false
