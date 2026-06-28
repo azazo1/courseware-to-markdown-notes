@@ -1,7 +1,7 @@
 interface:
   display_name: "课件笔记"
-  short_description: "按约 10 页分块读图, 生成中文为主的 Markdown 笔记"
-  default_prompt: "使用 $courseware-to-markdown-notes 将这份课件转换为一份完整, 保留结构且适合初学者阅读的 Markdown 笔记. 默认先渲染为页面图片, 再按每批约 10 页委派给子 agent 逐块阅读. 子 agent 也必须遵循同一 skill 的完整要求, 只是负责局部页块, 主 agent 负责整合, 全局一致性, 与终稿修订, 并用 LaTeX 表示公式. 默认使用中文教材式表达, 专有名词和英文术语首次出现时做一次中英对照, 后文使用中文名称为主."
+  short_description: "逐页读图生成结构清晰的中文课件笔记"
+  default_prompt: "使用 $courseware-to-markdown-notes 将这份课件按默认单 agent 路径转换为一份完整, 保留结构且适合初学者阅读的 Markdown 笔记."
 
 policy:
   allow_implicit_invocation: false
